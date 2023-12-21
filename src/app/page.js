@@ -15,19 +15,19 @@ useEffect(() => {
 }, [])
    
   return (
-    <div class="min-h-screen flex items-center justify-center bg-blue-400">
-    <div class="bg-white p-6 rounded shadow-md text-center">
-      <h2 class="text-2xl mb-4">Bienvenido</h2>
-      <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-2">
+    <div className="min-h-screen flex items-center justify-center bg-blue-400">
+    <div className="bg-white p-6 rounded shadow-md text-center">
+      <h2 className="text-2xl mb-4">Bienvenido</h2>
+      <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-2">
         Nueva Partida
       </button>
-      <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded m-2">
+      <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded m-2">
         Perfil
       </button>
-      <button class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded m-2">
+      <button className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded m-2">
         Registrarse
       </button>
-      <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded m-2">
+      <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded m-2">
         Ver Aliens
       </button>
     </div>
