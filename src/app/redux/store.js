@@ -8,5 +8,8 @@ export const store = configureStore({
     counter: counterSlice,
     alienList: alienListSlice,
     user: userSlice,
-  }
+  },
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+    serializableCheck: false,
+  }),
 });

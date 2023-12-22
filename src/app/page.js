@@ -8,7 +8,7 @@ function Home() {
 
 let dispatch = useDispatch()
 let valor = useSelector(state => state.alienList.list)
-console.log(valor)
+
 useEffect(() => {
     dispatch(fetchAliens())  
 
