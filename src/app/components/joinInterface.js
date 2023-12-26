@@ -40,7 +40,7 @@ const JoinInterface = ({idPartida}) => {
 
   return (
     <div className="grid grid-cols-2 gap-4 w-3/4 mx-auto">
-      <h1 className="col-span-2 text-center text-2xl font-bold mb-4">Elige tu color</h1>
+      <h1 className="col-span-2 text-center text-2xl font-bold mb-4">Elegí tu color</h1>
       {coloresParticipantes.map((color, index) => (
         <button
           key={index}

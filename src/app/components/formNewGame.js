@@ -92,7 +92,7 @@ let userID = user.uid
       {!jugadoresAsignados
         ? <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col items-center justify-center space-y-4">
     {Array.from({ length: 8 }, (_, i) => i).map((num) => (
-  <input key={num} {...register(`jugadores.${num}`)} placeholder={`ID del Jugador ${num + 1 }`} className={`px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-${colores[num]}-700`} style={{backgroundColor: colores[num], color: [codigoColores.blanco, codigoColores.amarillo].includes(colores[num]) ? 'black' : 'white'}} />
+  <input key={num} {...register(`jugadores.${num}`)} placeholder={`Nombre del Jugador ${num + 1 }`} className={`px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-${colores[num]}-700`} style={{backgroundColor: colores[num], color: [codigoColores.blanco, codigoColores.amarillo].includes(colores[num]) ? 'black' : 'white'}} />
 ))}
             <button type="submit" className="px-4 py-2 text-white rounded-md hover:bg-blue-700" style={{backgroundColor: '#0000FF'}}>Guardar</button>
           </form>

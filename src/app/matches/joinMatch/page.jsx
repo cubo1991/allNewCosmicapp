@@ -22,8 +22,15 @@ const JoinGame = () => {
     }
   };
 
+  const eraseGame = () => {
+    let userToModify =  JSON.parse(localStorage.getItem('user'))
+    delete userToModify.idPartida
+    localStorage.setItem('user', JSON.stringify(userToModify))
+    setIdPartida('');
+  }
+
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-200">
+    <div className="flex flex-col items-center justify-center h-screen bg-gray-200">
       {idPartida ? (
         <JoinInterface idPartida={idPartida}/>
       ) : (
@@ -33,6 +40,12 @@ const JoinGame = () => {
           className="p-6 m-4 bg-white rounded shadow-lg"
         />
       )}
+      <div className="p-6 m-4 bg-white rounded shadow-lg text-center">
+        <p className="text-gray-700">¿Quieres borrar la partida?</p>
+        <button onClick={eraseGame} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4">
+          Borrar Partida
+        </button>
+      </div>
     </div>
   )
 }
