@@ -1,39 +1,42 @@
-'use client'
 import FormNewGame from '@/app/components/formNewGame';
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid';
 
 const NewGame = () => {
-    let [user, setUser] = useState(JSON.parse(localStorage.getItem('user')))
+    let [user, setUser] = useState(null)
     let [partida, setPartida] = useState(false)
     let [showMessage, setShowMessage] = useState(false);
     let router = useRouter()
     
- 
-    useEffect(() => {  
-        if ('idPartida' in user) { 
-            setPartida(true)
-        }
-        else{
-            let updatedUser = {...user, idPartida: uuidv4().substring(0,5)}
-            setUser(updatedUser) 
-            localStorage.setItem('user', JSON.stringify(updatedUser))
-            setUser(JSON.parse(localStorage.getItem('user')))
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            let localUser = JSON.parse(localStorage.getItem('user'));
+            setUser(localUser);
+            if ('idPartida' in localUser) { 
+                setPartida(true)
+            }
+            else{
+                let updatedUser = {...localUser, idPartida: uuidv4().substring(0,5)}
+                setUser(updatedUser) 
+                localStorage.setItem('user', JSON.stringify(updatedUser))
+                setUser(JSON.parse(localStorage.getItem('user')))
+            }
         }
     }, []) 
 
     const eraseGame = () => {
-        let userToModify =  JSON.parse(localStorage.getItem('user'))
-        delete userToModify.idPartida
-        localStorage.setItem('user', JSON.stringify(userToModify))
-        setUser(userToModify)
-        setPartida(false)
+        if (typeof window !== 'undefined') {
+            let userToModify =  JSON.parse(localStorage.getItem('user'))
+            delete userToModify.idPartida
+            localStorage.setItem('user', JSON.stringify(userToModify))
+            setUser(userToModify)
+            setPartida(false)
+        }
     }
 
     const handleNoClick = () => {
         setShowMessage(true);
-       
     }
 
     const handleButtonClick = () => {
@@ -61,7 +64,7 @@ const NewGame = () => {
             <div className="bg-white p-6 rounded shadow-md text-center">
                 {
                     showMessage
-                    ? <h2 className="text-2xl mb-4">Esta es tu partida {user.idPartida} </h2>
+                    ? <h2 className="text-2xl mb-4">Esta es tu partida {user && user.idPartida} </h2>
 
 
                     : partida
@@ -77,8 +80,8 @@ const NewGame = () => {
                         </>
                         : 
                         <div>
-                          <h2 className="text-2xl mb-4">Código de partida {user.idPartida} </h2>
-                          <FormNewGame idPartida={user.idPartida}/>
+                          <h2 className="text-2xl mb-4">Código de partida {user && user.idPartida} </h2>
+                          <FormNewGame idPartida={user && user.idPartida}/>
                         </div>
                 }
             </div>
@@ -87,5 +90,3 @@ const NewGame = () => {
 }
 
 export default NewGame
-
-

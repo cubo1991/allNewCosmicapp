@@ -1,11 +1,12 @@
-'use client'
-
 import JoinInterface from '@/app/components/joinInterface';
 import { JoinMatch } from '@/app/components/joinMatch'
 import React, { useState, useEffect } from 'react'
 
 const JoinGame = () => {
-  let user = JSON.parse(localStorage.getItem("user"));
+  let user;
+  if (typeof window !== 'undefined') {
+    user = JSON.parse(localStorage.getItem("user"));
+  }
   const [idPartida, setIdPartida] = useState(user ? user.idPartida : '');
 
   useEffect(() => {
@@ -23,10 +24,12 @@ const JoinGame = () => {
   };
 
   const eraseGame = () => {
-    let userToModify =  JSON.parse(localStorage.getItem('user'))
-    delete userToModify.idPartida
-    localStorage.setItem('user', JSON.stringify(userToModify))
-    setIdPartida('');
+    if (typeof window !== 'undefined') {
+      let userToModify =  JSON.parse(localStorage.getItem('user'))
+      delete userToModify.idPartida
+      localStorage.setItem('user', JSON.stringify(userToModify))
+      setIdPartida('');
+    }
   }
 
   return (
