@@ -3,23 +3,33 @@ import FormNewGame from '@/app/components/formNewGame';
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid';
+import dynamic from 'next/dynamic'
 
 const NewGame = () => {
-    let [user, setUser] = useState(null)
+    const FormNewGameNoSSR = dynamic(
+        () => import('@/app/components/formNewGame'),
+        { ssr: false }
+      )
+
+    let [user, setUser] = useState(() => {
+        if (typeof window !== 'undefined') {
+            return JSON.parse(localStorage.getItem('user'));
+        } else {
+            return {};
+        }
+    });
     let [partida, setPartida] = useState(false)
     let [showMessage, setShowMessage] = useState(false);
     let router = useRouter()
-    
-    useEffect(() => {
-        if (typeof window !== 'undefined') {
-            let localUser = JSON.parse(localStorage.getItem('user'));
-            setUser(localUser);
-            if ('idPartida' in localUser) { 
-                setPartida(true)
-            }
-            else{
-                let updatedUser = {...localUser, idPartida: uuidv4().substring(0,5)}
-                setUser(updatedUser) 
+
+    useEffect(() => {  
+        if ('idPartida' in user) { 
+            setPartida(true)
+        }
+        else{
+            let updatedUser = {...user, idPartida: uuidv4().substring(0,5)}
+            setUser(updatedUser) 
+            if (typeof window !== 'undefined') {
                 localStorage.setItem('user', JSON.stringify(updatedUser))
                 setUser(JSON.parse(localStorage.getItem('user')))
             }
@@ -32,8 +42,8 @@ const NewGame = () => {
             delete userToModify.idPartida
             localStorage.setItem('user', JSON.stringify(userToModify))
             setUser(userToModify)
-            setPartida(false)
         }
+        setPartida(false)
     }
 
     const handleNoClick = () => {
@@ -65,7 +75,7 @@ const NewGame = () => {
             <div className="bg-white p-6 rounded shadow-md text-center">
                 {
                     showMessage
-                    ? <h2 className="text-2xl mb-4">Esta es tu partida {user && user.idPartida} </h2>
+                    ? <h2 className="text-2xl mb-4">Esta es tu partida {user.idPartida} </h2>
 
 
                     : partida
@@ -81,8 +91,8 @@ const NewGame = () => {
                         </>
                         : 
                         <div>
-                          <h2 className="text-2xl mb-4">Código de partida {user && user.idPartida} </h2>
-                          <FormNewGame idPartida={user && user.idPartida}/>
+                          <h2 className="text-2xl mb-4">Código de partida {user.idPartida} </h2>
+                          <FormNewGameNoSSR idPartida={user.idPartida}/>
                         </div>
                 }
             </div>

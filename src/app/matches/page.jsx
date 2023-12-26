@@ -5,7 +5,7 @@ import Link from 'next/link'
 
 const Matches = () => {
   const [user, setUser] = useState(null);
-  // const aliens = useSelector((state) => state.alienList.list)
+
 
   useEffect(() => {
     if (typeof window !== 'undefined') {

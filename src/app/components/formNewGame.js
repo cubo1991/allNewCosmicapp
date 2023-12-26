@@ -1,3 +1,4 @@
+'use client'
 import {useEffect, useState} from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { db } from '../firebase'
@@ -35,9 +36,9 @@ let userID = user.uid
   const [jugadoresTotales, setJugadoresTotales] = useState([])
   const [aliensAsignados, setAliensAsignados] = useState(false)
 
-  useEffect(() => {
-    dispatch(fetchAliens()) 
-  }, [])
+  // useEffect(() => {
+  //   dispatch(fetchAliens()) 
+  // }, [])
 
   const onSubmit = (data) => {
     let jugadoresValidos = data.jugadores.filter(jugador => jugador && jugador.trim() !== '');
