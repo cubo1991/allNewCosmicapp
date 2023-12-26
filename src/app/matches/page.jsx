@@ -24,9 +24,11 @@ const Matches = () => {
             </button>
        
         </Link>
+        <Link href='/matches/joinMatch'>
         <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded m-2">
           Sumarme a una Partida
         </button>
+        </Link>
         <button className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded m-2">
           Ver Partida
         </button>
