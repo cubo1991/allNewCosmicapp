@@ -4,30 +4,32 @@ import React,{useState, useEffect} from 'react'
 import { auth, db, provider } from '../firebase'
 import { signInWithPopup } from 'firebase/auth'
 import { useDispatch, useSelector } from 'react-redux'
-import { addUser } from '../../app/redux/features/userSlice'
 import ModalSignOut from './modalSignOut'
 import { QuerySnapshot, addDoc, collection, doc, query, setDoc } from 'firebase/firestore'
-
-
-
-
+import { addUser } from '@/redux/features/userSlice'
 
 
 export const SignIn = () => {
     let dispatch = useDispatch()
-    const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')))
+    const [user, setUser] = useState(null)
     const [isModalOpen, setIsModalOpen] = useState(false);
-    
-    
-useEffect(() => {
 
-    if(user) {     
-       addUsuario()    }
-   
-   }, [user])
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const userFromLocalStorage = JSON.parse(localStorage.getItem('user'));
+            if (userFromLocalStorage) {
+                setUser(userFromLocalStorage);
+            }
+        }
+    }, []);
+
+    useEffect(() => {
+        if(user) {     
+           addUsuario()    
+        }
+    }, [user])
 
     const addUsuario = async (e) => {
-       console.log()
         if (user) {
             await setDoc(doc(db, 'users', `${user.uid}`), {
                 aliensFavoritos: [],
@@ -35,13 +37,14 @@ useEffect(() => {
                 color: '',
                 copas: 0,
                 mail: user.email,
-                name: user.displayName
+                name: user.displayName,
+                amigos:'',
+                partidaActual: ''
             })
         } else {
             console.log('Usuario es null');
         }
     }
-    
 
     const HandleClick = () => { 
         signInWithPopup(auth, provider)
@@ -88,4 +91,3 @@ useEffect(() => {
         </>
     )
 }
-
