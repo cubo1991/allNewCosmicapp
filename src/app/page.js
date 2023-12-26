@@ -32,9 +32,11 @@ useEffect(() => {
       <button className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded m-2">
         Registrarse
       </button>
+      <Link href='/alienList'>
       <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded m-2">
         Ver Aliens
       </button>
+      </Link>
     </div>
   </div>
   
