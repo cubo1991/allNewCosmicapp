@@ -1,3 +1,4 @@
+'use client'
 import JoinInterface from '@/app/components/joinInterface';
 import { JoinMatch } from '@/app/components/joinMatch'
 import React, { useState, useEffect } from 'react'
