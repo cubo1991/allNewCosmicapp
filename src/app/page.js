@@ -4,18 +4,21 @@ import { useDispatch, useSelector } from 'react-redux'
 import { fetchAliens } from '../redux/features/alienListSlice'
 import Link from 'next/link'
 import { useState } from 'react'
+import { addUser } from '@/redux/features/userSlice'
 
 function Home() {   
   let dispatch = useDispatch()
   const [userId, setUserId] = useState(null)
   const [userConectado, setUserConectado] = useState(false)
-let usuario = useSelector(state => state.user)
+  let usuario = useSelector(state => state.user)
 
   useEffect(() => {
-
     let user = JSON.parse(localStorage.getItem('user'))
     let userUid = user ? user.uid : null
-    setUserId(userUid)
+    if (JSON.stringify(user) !== JSON.stringify(usuario.user)) {
+      dispatch(addUser(user))
+      setUserId(userUid)
+    }
   }, [usuario.user])
 
   useEffect(() => {
@@ -24,12 +27,14 @@ let usuario = useSelector(state => state.user)
    
 
   console.log(usuario.user)
+  console.log(usuario)
+
   return (
     <div  className="min-h-screen flex items-center justify-center bg-blue-400">
       <div className="bg-white p-6 rounded shadow-md text-center">
         <h2 className="text-2xl mb-4">Bienvenido</h2>
         {
-          Object.keys(usuario.user).length === 0
+          usuario && usuario.user && Object.keys(usuario.user).length != 0
           ?
           <div>
             <Link href='/matches'>
@@ -58,4 +63,3 @@ let usuario = useSelector(state => state.user)
 }
 
 export default Home
-

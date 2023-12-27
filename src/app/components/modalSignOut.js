@@ -1,10 +1,11 @@
 import { Fragment, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
-
+import { useDispatch } from 'react-redux'
+import { addUser } from '@/redux/features/userSlice'
 export default function ModalSignOut({ open, setOpen, setUser }) {
 
-
+let dispatch = useDispatch()
   const cancelButtonRef = useRef(null)
 
   return (
@@ -57,6 +58,7 @@ export default function ModalSignOut({ open, setOpen, setUser }) {
                     className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
                     onClick={() => {
                         localStorage.removeItem('user');
+                        dispatch(addUser(null));
                         setUser(null);
                        setOpen(false);
                     }}

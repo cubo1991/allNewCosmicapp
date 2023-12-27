@@ -1,8 +1,28 @@
-'use client'
 import React, { useState } from 'react'
+import ReactPaginate from 'react-paginate'
 
 export const AllAliens = ({ allAliens }) => {
   const [searchTerm, setSearchTerm] = useState('')
+  const [currentPage, setCurrentPage] = useState(0)
+  const itemsPerPage = 5
+
+  const aliensToShow = allAliens
+    .filter((alien) => {
+      if (searchTerm === '') {
+        return alien
+      } else if (
+        alien.Nombre.toLowerCase().includes(searchTerm.toLowerCase())
+      ) {
+        return alien
+      }
+    })
+    .slice(currentPage * itemsPerPage, (currentPage + 1) * itemsPerPage)
+
+  const pageCount = Math.ceil(allAliens.length / itemsPerPage)
+
+  const handlePageClick = ({ selected: selectedPage }) => {
+    setCurrentPage(selectedPage)
+  }
 
   return (
     <div className="p-6">
@@ -25,15 +45,7 @@ export const AllAliens = ({ allAliens }) => {
           </tr>
         </thead>
         <tbody>
-          {allAliens.filter((alien) => {
-            if (searchTerm === '') {
-              return alien
-            } else if (
-              alien.Nombre.toLowerCase().includes(searchTerm.toLowerCase())
-            ) {
-              return alien
-            }
-          }).map((alien, key) => (
+          {aliensToShow.map((alien, key) => (
             <tr key={key}>
               <td className="border px-4 py-2">{alien.Nombre}</td>
               <td className="border px-4 py-2">{alien.Dificultad}</td>
@@ -44,6 +56,19 @@ export const AllAliens = ({ allAliens }) => {
           ))}
         </tbody>
       </table>
+      <ReactPaginate
+  previousLabel={'Anterior'}
+  nextLabel={'Siguiente'}
+  pageCount={pageCount}
+  onPageChange={handlePageClick}
+  containerClassName={'flex justify-center my-4'}
+  pageLinkClassName={'mx-1 px-3 py-2 bg-white border border-gray-300 rounded text-blue-700 hover:bg-blue-500 hover:text-white'}
+  previousLinkClassName={'mx-1 px-3 py-2 bg-white border border-gray-300 rounded text-blue-700 hover:bg-blue-500 hover:text-white'}
+  nextLinkClassName={'mx-1 px-3 py-2 bg-white border border-gray-300 rounded text-blue-700 hover:bg-blue-500 hover:text-white'}
+  disabledClassName={'opacity-50 cursor-not-allowed'}
+  activeClassName={'bg-blue-500 text-white'}
+/>
+
     </div>
   )
 }

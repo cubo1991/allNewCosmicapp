@@ -45,6 +45,7 @@ let userID = user.uid
   
     if (jugadoresValidos.length > 0) {
       let jugadoresActivos = jugadoresValidos.map((jugador, index) => {
+        
         return {
           Id: jugador,
           color: colores[data.jugadores.indexOf(jugador)],
@@ -62,6 +63,7 @@ let userID = user.uid
     try {
       await setDoc(doc(db, "partidas", idPartida), { jugadores: jugadores });
       console.log("Documento creado con ID: ", idPartida);
+      console.log(jugadores)
     } catch (error) {
       console.error("Error al agregar documento: ", error);
     }
