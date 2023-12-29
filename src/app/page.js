@@ -26,8 +26,6 @@ function Home() {
   }, [])
    
 
-  console.log(usuario.user)
-  console.log(usuario)
 
   return (
     <div  className="min-h-screen flex items-center justify-center bg-blue-400">
@@ -55,7 +53,15 @@ function Home() {
             </Link>
           </div>
           :
-          <p>Por favor, inicie sesión</p>
+          <div>
+            
+          <p>Para crear partidas, inicie sesión</p>
+          <Link href='/matches/joinMatch'>
+          <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-2">
+            Unirme a partida
+          </button>
+        </Link>
+          </div>
         }
       </div>
     </div>

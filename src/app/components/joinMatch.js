@@ -27,7 +27,7 @@ export const JoinMatch = ({ value, onChange }) => {
     }
 
     const onSubmit = (data) => {
-      console.log(data.id)
+   
       onChange({ target: { value: data.id } });
     }
   

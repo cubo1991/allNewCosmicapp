@@ -9,11 +9,14 @@ const JoinInterface = ({idPartida}) => {
   const [selectedColor, setSelectedColor] = useState(null);
   const [datosAliens, setDatosAliens] = useState('')
   const [aliensElegidos, setAliensElegidos] = useState(null)
+  
+
 
   const getColors = async() => {
     let datos = await getDoc(doc(db,'partidas',idPartida)).then(datos => {
         setDatosAliens(datos.data())
-        const colores = datos.data().jugadores.map(jugador => jugador.color);
+        console.log(datos.data())
+        const colores = datos.data().jugadores.map(jugador => [jugador.color, jugador.Id]);
         setColoresParticipantes(colores);
        
     });
@@ -28,6 +31,7 @@ const JoinInterface = ({idPartida}) => {
     const encontrado = datos.data().jugadores.find(jugador => jugador.color === color);
     if (encontrado) {
         setAliensElegidos(encontrado.aliens);
+        console.log(encontrado)
     } else {
         console.log('No se encontró ningún jugador con el color seleccionado');
     }
@@ -38,18 +42,24 @@ const JoinInterface = ({idPartida}) => {
     getAliens(color);
   }
 
+console.log(coloresParticipantes)
   return (
     <div className="grid grid-cols-2 gap-4 w-3/4 mx-auto">
       <h1 className="col-span-2 text-center text-2xl font-bold mb-4">Elegí tu color</h1>
       {coloresParticipantes.map((color, index) => (
-        <button
-          key={index}
-          id={color}
-          className={`p-4 rounded text-white w-full h-20`}
-          style={{backgroundColor: color}}
-          onClick={() => handleClick(color)}
-        >
-        </button>
+       <button
+       key={index}
+       id={color[0]}
+       className={`p-4 rounded w-full h-20`}
+       style={{
+         backgroundColor: color[0],
+         color: (color[0] === '#FFFFFF' || color[0] === '#FFFF00') ? 'black' : 'white'
+       }}
+       onClick={() => handleClick(color[0])}
+     >
+       {color[1]}
+     </button>
+     
       ))}
       {selectedColor && aliensElegidos && <p>Aliens que te tocaron para la partida {idPartida}: {`${aliensElegidos[0]} y ${aliensElegidos[1]}`}</p>}
     </div>
