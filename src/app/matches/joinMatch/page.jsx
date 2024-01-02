@@ -38,7 +38,10 @@ const JoinGame = () => {
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-200">
       {idPartida ? (
-        <JoinInterface idPartida={idPartida}/>
+        <div className="overflow-auto w-full">
+
+          <JoinInterface idPartida={idPartida}/>
+        </div>
       ) : (
         <JoinMatch 
           value={idPartida}
