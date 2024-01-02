@@ -12,6 +12,7 @@ const JoinInterface = ({idPartida}) => {
   const [datosAliens, setDatosAliens] = useState('')
   const [aliensElegidos, setAliensElegidos] = useState(null)
   const [aliens, setAliens] = useState(JSON.parse(localStorage.getItem("alienList")) || [])
+  
 
   const getColors = async() => {
     let datos = await getDoc(doc(db,'partidas',idPartida)).then(datos => {
@@ -34,7 +35,7 @@ const JoinInterface = ({idPartida}) => {
         const encontrado = datos.data().jugadores.find(jugador => jugador.color === color);
         if (encontrado) {
             setAliensElegidos(encontrado.aliens);
-            console.log(encontrado)
+         
         } else {
             console.log('No se encontró ningún jugador con el color seleccionado');
         }

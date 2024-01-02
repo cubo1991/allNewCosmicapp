@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { AlienCard } from './alienCard'
 
 export const AlienCardJoinGameContainer = ({aliensJugador, aliens}) => {
+  console.log('aliens: ', aliens)
+  console.log('aliens del jugador: ' + aliensJugador)
   const [filteredAliens, setFilteredAliens] = useState([]);
 
   useEffect(() => {
