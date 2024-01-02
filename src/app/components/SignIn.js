@@ -35,11 +35,19 @@ export const SignIn = () => {
                 aliensFavoritos: [],
                 campañas: 0,
                 color: '',
-                copas: 0,
+                cantidadCopas: 0,
+                cantidadCampañas: 0,
+                copas:[],
+                ranking: 1,
+                ultimoPodio: 0,
+                ultimaCampaña:0,
                 mail: user.email,
                 name: user.displayName,
                 amigos:'',
-                partidaActual: ''
+                partidaActual: '',
+                puntosPartidas: [],
+                puntosTotales: 0,
+                id: user.uid,
             })
         } else {
             console.log('Usuario es null');
