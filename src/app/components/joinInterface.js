@@ -50,7 +50,7 @@ const JoinInterface = ({idPartida}) => {
     <div>
 
     <div className="grid grid-cols-2 gap-4 w-3/4 mx-auto">
-      <h1 className="col-span-2 text-center text-2xl font-bold mb-4">Elige tu color</h1>
+      <h1 className="col-span-2 text-center text-2xl font-bold mb-4">Elegí tu color para la partida {idPartida}</h1>
       {coloresParticipantes.map((color, index) => (
        <button
        key={index}
@@ -72,7 +72,7 @@ const JoinInterface = ({idPartida}) => {
     <div className="flex flex-wrap justify-center">
          {selectedColor && aliensElegidos && 
       <div>
-      <p>Aliens que te tocaron para la partida {idPartida}: {`${aliensElegidos[0]} y ${aliensElegidos[1]}`}</p>
+      <p className=" mt-2 text-2xl font-bold text-center">Tus aliens: </p>
       <AlienCardJoinGameContainer aliensJugador={aliensElegidos} aliens={aliens}/>
       
        </div>

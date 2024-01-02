@@ -19,7 +19,7 @@ export const AlienCard = ({key, alien}) => {
       <table className="w-full">
         <tr>
           <td className="w-2/3">
-            <p className="font-bold text-lg">{alien.Nombre}</p>
+            <h2 className=" mt-2 text-2xl font-bold">{alien.Nombre}</h2>
           </td>
           <td className="w-1/3 flex justify-end items-center">
             <span className={`h-4 w-4 rounded-full ${difficultyColor[alien.Dificultad]}`}></span>
@@ -27,7 +27,7 @@ export const AlienCard = ({key, alien}) => {
         </tr>
         <tr>
           <td colSpan="2">
-          <h2 className="mt-2 text-2xl font-bold">{alien.Poder}</h2>
+          <h3 className="font-bold text-lg">{alien.Poder}</h3>
             <p className={`overflow-hidden ${isExpanded ? '' : 'max-h-14'}`}>{alien.Descripción? alien.Descripción : 'Chupala, no me voy a poner a llenar manualmente este poder'}</p>
             <button onClick={handleExpandClick} className="text-blue-500 mt-2">{isExpanded ? 'Ver menos' : 'Ver más'}</button>
           </td>
