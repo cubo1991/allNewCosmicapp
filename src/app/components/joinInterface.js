@@ -4,15 +4,17 @@ import { doc, getDoc } from "firebase/firestore";
 import { db } from '../firebase';
 import { AlienCard } from './alienCard';
 import { AlienCardJoinGameContainer } from './alienCardJoinGameContainer';
+import { useSelector } from 'react-redux';
 
 const JoinInterface = ({idPartida}) => {
- 
+  const alienState = useSelector(state => state.alienList.list)
   const [coloresParticipantes, setColoresParticipantes] = useState([])
   const [selectedColor, setSelectedColor] = useState(null);
   const [datosAliens, setDatosAliens] = useState('')
   const [aliensElegidos, setAliensElegidos] = useState(null)
-  const [aliens, setAliens] = useState(JSON.parse(localStorage.getItem("alienList")) || [])
-  
+  const [aliens, setAliens] = useState(alienState || [])
+
+
 
   const getColors = async() => {
     let datos = await getDoc(doc(db,'partidas',idPartida)).then(datos => {
