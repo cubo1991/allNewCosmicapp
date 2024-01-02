@@ -8,7 +8,7 @@ export const AllAliens = ({ allAliens }) => {
 
   const aliensToShow = allAliens
     .filter((alien) => {
-      if (searchTerm === '') {
+      if (alien && searchTerm === '') {
         return alien
       } else if (
         alien.Nombre.toLowerCase().includes(searchTerm.toLowerCase())

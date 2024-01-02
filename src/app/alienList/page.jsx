@@ -22,10 +22,10 @@ function HomePage() {
     setAliensList(aliens)
   },[aliens])
    
-  console.log(aliens)
+ 
   return (
     <div>
-      <AllAliens allAliens={aliens}/>
+      {aliens && <AllAliens allAliens={aliens}/>}
       <AlienCard/>
 
     </div>
