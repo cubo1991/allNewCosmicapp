@@ -2,6 +2,7 @@
 import Link from 'next/link'
 import React from 'react'
 
+
  const Puntajes = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-blue-400">
@@ -12,9 +13,11 @@ import React from 'react'
           Crear Copa
         </button>
         </Link>
+        <Link href="/puntajes/putCup">
         <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded m-2">
-          Ver Copa
+          Actualizar Copa
         </button>
+        </Link>
         <button className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded m-2">
           Ver Estadísticas
         </button>

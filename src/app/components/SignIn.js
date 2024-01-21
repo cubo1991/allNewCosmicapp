@@ -44,10 +44,15 @@ export const SignIn = () => {
                 mail: user.email,
                 name: user.displayName,
                 amigos:'',
-                partidaActual: '',
-                puntosPartidas: [],
+                partidaActual: '' ,
                 puntosTotales: 0,
                 id: user.uid,
+                jugadas: 0,
+                victorias: 0,
+                colonias:0,
+                victoriasEspeciales:0,
+                ataqueSolitario:0,
+                defensaSolitaria:0,
             })
         } else {
             console.log('Usuario es null');
