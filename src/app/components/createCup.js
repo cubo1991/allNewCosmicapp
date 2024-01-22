@@ -42,7 +42,7 @@ const CreateCup = () => {
     event.preventDefault();
     const cupId = uuidv4().slice(0, 5);
     const newCup = {
-      Date: new Date(),
+      date: new Date(),
       id: cupId,
       jugadores: selectedUsers.map(user => ({id: user.id, apodo: user.nickname, nombre: user.name})),
       partidas: 0,

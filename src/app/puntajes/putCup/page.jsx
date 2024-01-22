@@ -1,6 +1,6 @@
 'use client'
 import React, { useEffect, useState } from 'react';
-import { collection, doc, getDoc, getDocs, setDoc, updateDoc } from "firebase/firestore"; 
+import { Timestamp, collection, doc, getDoc, getDocs, setDoc, updateDoc } from "firebase/firestore"; 
 import { db } from '../../firebase';
 import CupTable from '@/app/components/cupTable';
 import PutCup from '@/app/components/putCup';
@@ -35,20 +35,39 @@ const Page = () => {
       // Obtén todas las copas
       const cupsSnapshot = await getDocs(collection(db, 'copas'));
       let latestCup = null;
-    
   
-      // Recorre todas las copas
-      cupsSnapshot.forEach((doc) => {
-        const cupData = doc.data();
-       
-        // Comprueba si el jugador participó en la copa
-        const isPlayerInCup = cupData.jugadores.some((jug) => jug.id === jugador.uid);
+     // Recorre todas las copas
+cupsSnapshot.forEach((doc) => {
+  const cupData = doc.data();
 
-        // Si el jugador participó y la copa es más reciente que la almacenada, actualiza latestCup
-        if (isPlayerInCup && (!latestCup || cupData.fecha > latestCup.fecha)) {
-          latestCup = { id: doc.id, ...cupData };
-        }
-      });
+  // Comprueba si el jugador participó en la copa
+  const isPlayerInCup = cupData.jugadores.some((jug) => jug.id === jugador.uid);
+
+  // Obtiene la fecha en milisegundos
+  let cupDateMillis;
+  if (cupData.date instanceof Date) {
+    cupDateMillis = cupData.date.getTime();
+  } else if (cupData.date && typeof cupData.date === 'object') {
+    cupDateMillis = new Date(cupData.date.seconds * 1000).getTime();
+  }
+
+  // Obtiene la fecha en milisegundos
+  let latestCupDateMillis;
+  if (latestCup && latestCup.date instanceof Date) {
+    latestCupDateMillis = latestCup.date.getTime();
+  } else if (latestCup && latestCup.date && typeof latestCup.date === 'object') {
+    latestCupDateMillis = new Date(latestCup.date.seconds * 1000).getTime();
+  }
+
+  // Si el jugador participó y la copa es más reciente que la almacenada, actualiza latestCup
+  if (isPlayerInCup && (!latestCup || cupDateMillis > latestCupDateMillis)) {
+    latestCup = { id: doc.id, ...cupData };
+    if(cupData && cupData.date){
+      console.log(cupData.date)
+      console.log(latestCup.date)
+    }
+  }
+});
   
       // Establece la copa más reciente como actualCup
       if (latestCup) {
@@ -56,8 +75,12 @@ const Page = () => {
       }
     };
   
-    fetchLatestCup();
+    // Llama a fetchLatestCup y espera a que se complete
+    (async () => {
+      await fetchLatestCup();
+    })();
   }, []);
+  
 
   useEffect(() => {
     const fetchCup = async () => {
@@ -99,6 +122,7 @@ const Page = () => {
       },
     }));
   };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -108,7 +132,16 @@ const Page = () => {
     const cupSnapshot = await getDoc(cupDoc);
   
     if (cupSnapshot.exists()) {
-      let cupData = JSON.parse(JSON.stringify(cupSnapshot.data()));
+      let cupData = cupSnapshot.data();
+  
+      // Convierte los Timestamps a Date antes de llamar a JSON.stringify
+      for (let key in cupData) {
+        if (cupData[key] instanceof Timestamp) {
+          cupData[key] = cupData[key].toDate();
+        }
+      }
+  
+      cupData = JSON.parse(JSON.stringify(cupData));
       cupData.partidaActual = cupData.partidaActual || 1;
   
       let numJugadores = 0;
@@ -139,52 +172,46 @@ const Page = () => {
       });
   
       cupData.jugadores = updatedJugadores;
-    
+  
       setFirebaseData(cupData);
   
       cupData.partidaActual += 1;
   
       await updateDoc(cupDoc, cupData);
   
-     
-// Actualiza los datos del usuario en la colección 'users'
-// Actualiza los datos del usuario en la colección 'users'
-for (let jugador of cupData.jugadores) {
-  const userDoc = doc(db, 'users', jugador.id);
-  const userData = await getDoc(userDoc);
-  let user = userData.data();
-
-  // Define jugadorData en este ámbito
-  let jugadorData = gameData[jugador.id];
-
-  // Inicializa las propiedades si no existen
-  user.jugadas = user.jugadas || 0;
-  user.colonias = user.colonias || 0;
-  user.victorias = user.victorias || 0;
-  user.puntosPartidas = user.puntosPartidas || [];
-
-  // Actualiza las propiedades
-  user.jugadas += 1;
-  user.colonias += jugadorData && jugadorData.CE ? parseInt(jugadorData.CE) : 0;
-  user.victorias += jugadorData && jugadorData.win ? 1 : 0;
+      // Actualiza los datos del usuario en la colección 'users'
+      for (let jugador of cupData.jugadores) {
+        const userDoc = doc(db, 'users', jugador.id);
+        const userData = await getDoc(userDoc);
+        let user = userData.data();
   
-  if (jugador.puntos) {
-    let values = Object.values(jugador.puntos);
-    let lastValue = values[values.length - 1];
-    user.puntosPartidas.push(lastValue);
-  }
-
-  // Guarda los datos del usuario
-  await updateDoc(userDoc, user);
-}
-
-
-
-
-
+        // Define jugadorData en este ámbito
+        let jugadorData = gameData[jugador.id];
+  
+        // Inicializa las propiedades si no existen
+        user.jugadas = user.jugadas || 0;
+        user.colonias = user.colonias || 0;
+        user.victorias = user.victorias || 0;
+        user.puntosPartidas = user.puntosPartidas || [];
+  
+        // Actualiza las propiedades
+        user.jugadas += 1;
+        user.colonias += jugadorData && jugadorData.CE ? parseInt(jugadorData.CE) : 0;
+        user.victorias += jugadorData && jugadorData.win ? 1 : 0;
+  
+        if (jugador.puntos) {
+          let values = Object.values(jugador.puntos);
+          let lastValue = values[values.length - 1];
+          user.puntosPartidas.push(lastValue);
+        }
+  
+        // Guarda los datos del usuario
+        await updateDoc(userDoc, user);
+      }
+  
       window.location.reload();
     }
-  };
+  }
   
  
 
