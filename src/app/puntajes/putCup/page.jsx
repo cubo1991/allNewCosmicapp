@@ -8,7 +8,11 @@ import PutCup from '@/app/components/putCup';
 
 
 const Page = () => {
-  const jugador = JSON.parse(localStorage.getItem('user'));
+  let jugador = null;
+
+  if (typeof window !== 'undefined') {
+    jugador = JSON.parse(localStorage.getItem('user'));
+  }
 
   const [cup, setCup] = useState(null);
   const [gameData, setGameData] = useState({});
@@ -61,6 +65,7 @@ cupsSnapshot.forEach((doc) => {
 
   // Si el jugador participó y la copa es más reciente que la almacenada, actualiza latestCup
   if (isPlayerInCup && (!latestCup || cupDateMillis > latestCupDateMillis)) {
+    
     latestCup = { id: doc.id, ...cupData };
     if(cupData && cupData.date){
       console.log(cupData.date)
@@ -87,6 +92,17 @@ cupsSnapshot.forEach((doc) => {
       if (actualCup) {
         const cupId = actualCup;
         const cupDoc = doc(db, 'copas', cupId);
+       
+        //todas las copas
+        const cupCollection = collection(db, 'copas');
+        const cupSnapshotAll = await getDocs(cupCollection);
+        
+        cupSnapshotAll.forEach((doc) => {
+          console.log(doc.id, " => ", doc.data());
+        });
+        
+
+        
         const cupSnapshot = await getDoc(cupDoc);
         if (cupSnapshot.exists()) {
           setCup(cupSnapshot.data());
@@ -138,6 +154,7 @@ cupsSnapshot.forEach((doc) => {
       for (let key in cupData) {
         if (cupData[key] instanceof Timestamp) {
           cupData[key] = cupData[key].toDate();
+          
         }
       }
   
@@ -184,10 +201,11 @@ cupsSnapshot.forEach((doc) => {
         const userDoc = doc(db, 'users', jugador.id);
         const userData = await getDoc(userDoc);
         let user = userData.data();
+      
   
         // Define jugadorData en este ámbito
         let jugadorData = gameData[jugador.id];
-  
+        console.log(jugadorData)
         // Inicializa las propiedades si no existen
         user.jugadas = user.jugadas || 0;
         user.colonias = user.colonias || 0;
@@ -204,12 +222,12 @@ cupsSnapshot.forEach((doc) => {
           let lastValue = values[values.length - 1];
           user.puntosPartidas.push(lastValue);
         }
-  
-        // Guarda los datos del usuario
+        
+        // Guarda los datos del usuario     
         await updateDoc(userDoc, user);
       }
   
-      window.location.reload();
+      // window.location.reload();
     }
   }
   
