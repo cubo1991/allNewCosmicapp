@@ -56,6 +56,7 @@ const CreateCup = () => {
     await setDoc(doc(cupsCollection, cupId), newCup);
 
     for (const user of selectedUsers) {
+      
       const userRef = doc(db, 'users', user.id);
       await updateDoc(userRef, {
         copas: arrayUnion(cupId)

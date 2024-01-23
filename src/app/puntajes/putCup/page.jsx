@@ -33,73 +33,48 @@ const Page = () => {
       end: end
     });
   };
-
+//el problema es que siempre trae la primera que esta en firebase
   useEffect(() => {
     const fetchLatestCup = async () => {
-      // Obtén todas las copas
       const cupsSnapshot = await getDocs(collection(db, 'copas'));
       let latestCup = null;
   
-     // Recorre todas las copas
-cupsSnapshot.forEach((doc) => {
-  const cupData = doc.data();
-
-  // Comprueba si el jugador participó en la copa
-  const isPlayerInCup = cupData.jugadores.some((jug) => jug.id === jugador.uid);
-
-  // Obtiene la fecha en milisegundos
-  let cupDateMillis;
-  if (cupData.date instanceof Date) {
-    cupDateMillis = cupData.date.getTime();
-  } else if (cupData.date && typeof cupData.date === 'object') {
-    cupDateMillis = new Date(cupData.date.seconds * 1000).getTime();
-  }
-
-  // Obtiene la fecha en milisegundos
-  let latestCupDateMillis;
-  if (latestCup && latestCup.date instanceof Date) {
-    latestCupDateMillis = latestCup.date.getTime();
-  } else if (latestCup && latestCup.date && typeof latestCup.date === 'object') {
-    latestCupDateMillis = new Date(latestCup.date.seconds * 1000).getTime();
-  }
-
-  // Si el jugador participó y la copa es más reciente que la almacenada, actualiza latestCup
-  if (isPlayerInCup && (!latestCup || cupDateMillis > latestCupDateMillis)) {
-    
-    latestCup = { id: doc.id, ...cupData };
-    if(cupData && cupData.date){
-      console.log(cupData.date)
-      console.log(latestCup.date)
-    }
-  }
-});
+      cupsSnapshot.forEach((doc) => {
+        const cupData = doc.data();
+        console.log('Datos de la copa: ', cupData); // Verifica los datos de cada copa
   
-      // Establece la copa más reciente como actualCup
+        const isPlayerInCup = cupData.jugadores.some((jug) => jug.id === jugador.uid);
+        console.log('¿El jugador participó en la copa?: ', isPlayerInCup); // Verifica si el jugador participó en la copa
+  
+        if (isPlayerInCup) {
+          if (!latestCup || new Date(cupData.date.seconds * 1000) > new Date(latestCup.date.seconds * 1000)) {
+            latestCup = { id: doc.id, ...cupData };
+            console.log('Copa más reciente actualizada: ', latestCup); // Verifica la copa más reciente
+          }
+        }
+      });
+  
       if (latestCup) {
         setActualCup(latestCup.id);
+        console.log('Copa actual establecida: ', latestCup.id); // Verifica la copa actual
       }
     };
   
-    // Llama a fetchLatestCup y espera a que se complete
     (async () => {
       await fetchLatestCup();
     })();
   }, []);
+  
+  
   
 
   useEffect(() => {
     const fetchCup = async () => {
       if (actualCup) {
         const cupId = actualCup;
-        const cupDoc = doc(db, 'copas', cupId);
        
-        //todas las copas
-        const cupCollection = collection(db, 'copas');
-        const cupSnapshotAll = await getDocs(cupCollection);
-        
-        cupSnapshotAll.forEach((doc) => {
-          console.log(doc.id, " => ", doc.data());
-        });
+        const cupDoc = doc(db, 'copas', cupId);
+    
         
 
         

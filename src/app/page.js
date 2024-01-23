@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { useState } from 'react'
 import { addUser } from '@/redux/features/userSlice'
 
-function Home() {   
+function Home() {
   let dispatch = useDispatch()
   const [userId, setUserId] = useState(null)
   const [userConectado, setUserConectado] = useState(false)
@@ -24,7 +24,7 @@ function Home() {
   useEffect(() => {
     dispatch(fetchAliens())
   }, [])
-   
+
 
 
   return (
@@ -43,8 +43,8 @@ function Home() {
             <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded m-2">
               Perfil
             </button>
-            <Link href='/puntajes'>       
-         
+            <Link href='/puntajes'>
+
             <button className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded m-2">
               Puntajes
             </button>
@@ -57,7 +57,7 @@ function Home() {
           </div>
           :
           <div>
-            
+
           <p>Para crear partidas, inicie sesión</p>
           <Link href='/matches/joinMatch'>
           <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-2">

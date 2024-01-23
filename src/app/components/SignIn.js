@@ -5,7 +5,7 @@ import { auth, db, provider } from '../firebase'
 import { signInWithPopup } from 'firebase/auth'
 import { useDispatch, useSelector } from 'react-redux'
 import ModalSignOut from './modalSignOut'
-import { QuerySnapshot, addDoc, collection, doc, query, setDoc } from 'firebase/firestore'
+import { QuerySnapshot, addDoc, collection, doc, getDoc, query, setDoc } from 'firebase/firestore'
 import { addUser } from '@/redux/features/userSlice'
 
 
@@ -29,31 +29,38 @@ export const SignIn = () => {
         }
     }, [user])
 
-    const addUsuario = async (e) => {
+    const addUsuario = async () => {
         if (user) {
-            await setDoc(doc(db, 'users', `${user.uid}`), {
-                aliensFavoritos: [],
-                campañas: 0,
-                color: '',
-                cantidadCopas: 0,
-                cantidadCampañas: 0,
-                copas:[],
-                ranking: 1,
-                ultimoPodio: 0,
-                ultimaCampaña:0,
-                mail: user.email,
-                name: user.displayName,
-                amigos:'',
-                partidaActual: '' ,
-                puntosTotales: 0,
-                id: user.uid,
-                jugadas: 0,
-                victorias: 0,
-                colonias:0,
-                victoriasEspeciales:0,
-                ataqueSolitario:0,
-                defensaSolitaria:0,
-            })
+            const docRef = doc(db, 'users', `${user.uid}`);
+            const docSnap = await getDoc(docRef);
+    
+            if (!docSnap.exists()) {
+                await setDoc(docRef, {
+                    aliensFavoritos: [],
+                    campañas: 0,
+                    color: '',
+                    cantidadCopas: 0,
+                    cantidadCampañas: 0,
+                    copas:[],
+                    ranking: 1,
+                    ultimoPodio: 0,
+                    ultimaCampaña:0,
+                    mail: user.email,
+                    name: user.displayName,
+                    amigos:'',
+                    partidaActual: '' ,
+                    puntosTotales: 0,
+                    id: user.uid,
+                    jugadas: 0,
+                    victorias: 0,
+                    colonias:0,
+                    victoriasEspeciales:0,
+                    ataqueSolitario:0,
+                    defensaSolitaria:0,
+                });
+            } else {
+                console.log('El usuario ya existe en la base de datos');
+            }
         } else {
             console.log('Usuario es null');
         }
