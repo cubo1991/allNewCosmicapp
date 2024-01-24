@@ -1,6 +1,6 @@
 'use client'
 import React, { useEffect, useState } from 'react';
-import { Timestamp, collection, doc, getDoc, getDocs, setDoc, updateDoc } from "firebase/firestore"; 
+import { Timestamp, collection, doc, getDoc, getDocs, setDoc, updateDoc, batch  } from "firebase/firestore"; 
 import { db } from '../../firebase';
 import CupTable from '@/app/components/cupTable';
 import PutCup from '@/app/components/putCup';
@@ -33,30 +33,33 @@ const Page = () => {
       end: end
     });
   };
-//el problema es que siempre trae la primera que esta en firebase
+
   useEffect(() => {
     const fetchLatestCup = async () => {
       const cupsSnapshot = await getDocs(collection(db, 'copas'));
-      let latestCup = null;
+      let closestCup = null;
+      let closestTimeDifference = null;
+  
+      const now = new Date(); // Momento actual
   
       cupsSnapshot.forEach((doc) => {
         const cupData = doc.data();
-        console.log('Datos de la copa: ', cupData); // Verifica los datos de cada copa
-  
         const isPlayerInCup = cupData.jugadores.some((jug) => jug.id === jugador.uid);
-        console.log('¿El jugador participó en la copa?: ', isPlayerInCup); // Verifica si el jugador participó en la copa
   
-        if (isPlayerInCup) {
-          if (!latestCup || new Date(cupData.date.seconds * 1000) > new Date(latestCup.date.seconds * 1000)) {
-            latestCup = { id: doc.id, ...cupData };
-            console.log('Copa más reciente actualizada: ', latestCup); // Verifica la copa más reciente
+        // Solo consideramos las copas que no han sido finalizadas
+        if (isPlayerInCup && !cupData.finalizada) {
+          const cupDate = new Date(cupData.date.seconds * 1000);
+          const timeDifference = Math.abs(now - cupDate);
+  
+          if (!closestCup || timeDifference < closestTimeDifference) {
+            closestCup = { id: doc.id, ...cupData };
+            closestTimeDifference = timeDifference;
           }
         }
       });
   
-      if (latestCup) {
-        setActualCup(latestCup.id);
-        console.log('Copa actual establecida: ', latestCup.id); // Verifica la copa actual
+      if (closestCup) {
+        setActualCup(closestCup.id);
       }
     };
   
@@ -67,18 +70,21 @@ const Page = () => {
   
   
   
+  
+  
 
   useEffect(() => {
     const fetchCup = async () => {
       if (actualCup) {
         const cupId = actualCup;
-       
+
         const cupDoc = doc(db, 'copas', cupId);
     
         
 
         
         const cupSnapshot = await getDoc(cupDoc);
+       
         if (cupSnapshot.exists()) {
           setCup(cupSnapshot.data());
         } else {
@@ -180,7 +186,7 @@ const Page = () => {
   
         // Define jugadorData en este ámbito
         let jugadorData = gameData[jugador.id];
-        console.log(jugadorData)
+      
         // Inicializa las propiedades si no existen
         user.jugadas = user.jugadas || 0;
         user.colonias = user.colonias || 0;
@@ -202,11 +208,44 @@ const Page = () => {
         await updateDoc(userDoc, user);
       }
   
-      // window.location.reload();
+      window.location.reload();
     }
-  }
+  } 
+
+
+  useEffect(() => {
+    console.log(podio)
+    const updateCupPodio = async () => {
+      if (podio.end) {
+        // Primero, actualizamos el campo 'ultimoPodio' a 0 para todos los usuarios
+        const usersSnapshot = await getDocs(collection(db, 'users'));
+        usersSnapshot.forEach(doc => {
+          updateDoc(doc.ref, { ultimoPodio: 0 });
+        });
   
- 
+        // Luego, actualizamos 'ultimoPodio' para los jugadores en el podio
+        const podioUpdates = {
+          [podio.primero.id]: 10,
+          [podio.segundo.id]: 7,
+          [podio.tercero.id]: 5
+        };
+        for (const userId in podioUpdates) {
+          const userRef = doc(db, 'users', userId);
+          updateDoc(userRef, { ultimoPodio: podioUpdates[userId] });
+        }
+
+        // Incrementamos 'cantidadCopas' en 1 para el jugador que terminó primero
+        const firstPlaceUserRef = doc(db, 'users', podio.primero.id);
+        const firstPlaceUserSnapshot = await getDoc(firstPlaceUserRef);
+        const currentCups = firstPlaceUserSnapshot.data().cantidadCopas;
+        updateDoc(firstPlaceUserRef, { cantidadCopas: currentCups + 1 });
+      }
+    };
+  
+    updateCupPodio();
+  }, [cup, podio]);
+
+
 
 
   

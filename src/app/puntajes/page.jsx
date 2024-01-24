@@ -18,12 +18,16 @@ import React from 'react'
           Actualizar Copa
         </button>
         </Link>
+        <Link href="/puntajes/estadisticas">
         <button className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded m-2">
           Ver Estadísticas
         </button>
+        </Link>
+        <Link href="/puntajes/ranking">
         <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded m-2">
           Ver Ranking
         </button>
+        </Link>
       </div>
     </div>
   )
