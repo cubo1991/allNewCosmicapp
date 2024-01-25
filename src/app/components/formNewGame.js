@@ -35,10 +35,10 @@ let userID = user.uid
   const [aliensPartida, setAliensPartidas] = useState([])
   const [jugadoresTotales, setJugadoresTotales] = useState([])
   const [aliensAsignados, setAliensAsignados] = useState(false)
-
-  // useEffect(() => {
-  //   dispatch(fetchAliens()) 
-  // }, [])
+  
+  const urlPartida = `${window.location.origin}/matches/joinMatch/${idPartida}`
+  const mensaje = `Mira esta partida: ${urlPartida} \n\nHaz clic en el enlace de arriba para unirte a la partida!`
+  const urlWhatsApp = `https://wa.me/?text=${encodeURIComponent(mensaje)}`
 
   const onSubmit = (data) => {
     let jugadoresValidos = data.jugadores.filter(jugador => jugador && jugador.trim() !== '');
@@ -103,6 +103,10 @@ let userID = user.uid
           ? <button onClick={addAliens} className="px-4 py-2 text-white rounded-md hover:bg-blue-700" style={{backgroundColor: '#0000FF'}}>Asignar aliens</button>
           : <div>
               <p className="text-lg font-bold text-center text-blue-700">El Cosmos ya fue asignado</p>
+              <div>
+
+              <Link className="text-center text-blue-500 hover:underline" href={urlWhatsApp} target="_blank" rel="noopener noreferrer">Compartir en WhatsApp</Link>
+              </div>
               <Link className="text-center text-blue-500 hover:underline" href="/">Volver a la home</Link>
             </div>
       }

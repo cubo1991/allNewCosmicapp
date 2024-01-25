@@ -4,14 +4,10 @@ import JoinInterface from '@/app/components/joinInterface';
 import { JoinMatch } from '@/app/components/joinMatch'
 import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux';
+// import { useRouter } from 'next/router'
 
+const DinamicJoinGame = ({params}) => {
 
-const JoinGame = () => {
-
-
-
-
-  // Resto de tu código...
   let usuario = useSelector(state => state.user)
   let user;
   if (typeof window !== 'undefined') {
@@ -72,4 +68,4 @@ const JoinGame = () => {
   )
 }
 
-export default JoinGame
+export default DinamicJoinGame
