@@ -23,6 +23,11 @@ import React from 'react'
           Ver Estadísticas
         </button>
         </Link>
+        <Link href="/puntajes/editEstadisticas">
+        <button className="bg-orange-500 hover:bg-orange-700 text-white font-bold py-2 px-4 rounded m-2">
+          Editar Estadísticas
+        </button>
+        </Link>
         <Link href="/puntajes/ranking">
         <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded m-2">
           Ver Ranking
