@@ -14,6 +14,7 @@ export const fetchAliens = createAsyncThunk('aliens/fetchAliens', async (_, { di
                 alienList.push(doc.data());
             });
             dispatch(addAliens(alienList));
+            localStorage.setItem( alienList, JSON.stringify(alienList) )
         });
     } catch (error) {
         console.error("Error fetching aliens: ", error);
@@ -28,6 +29,7 @@ const alienListSlice = createSlice({
     reducers: {
         addAliens: (state, action) => {
             state.list = action.payload;
+           
         }
     }
 });

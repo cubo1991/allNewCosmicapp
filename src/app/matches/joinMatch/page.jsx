@@ -5,19 +5,23 @@ import { JoinMatch } from '@/app/components/joinMatch'
 import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux';
 
-
 const JoinGame = () => {
 
-
-
-
-  // Resto de tu código...
   let usuario = useSelector(state => state.user)
-  let user;
-  if (typeof window !== 'undefined') {
-    user = JSON.parse(localStorage.getItem("user"));
-  }
-  const [idPartida, setIdPartida] = useState(user ? user.idPartida : '');
+  const [user, setUser] = useState(null);
+  const [idPartida, setIdPartida] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const localUser = JSON.parse(localStorage.getItem("user"));
+      setUser(localUser);
+      if (localUser) {
+        setIdPartida(localUser.idPartida);
+      }
+      setIsLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
     if (user) {
@@ -42,6 +46,10 @@ const JoinGame = () => {
     }
   }
 
+  if (isLoading) {
+    return <div>Loading...</div>; // Renderiza un componente de carga mientras se obtiene el usuario
+  }
+
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-200">
       {idPartida ? (
@@ -56,10 +64,10 @@ const JoinGame = () => {
         />
       )}
       {
-  usuario && usuario.user && Object.keys(usuario.user).length != 0
+user && Object.keys(user).length != 0
   ?
       <div className="p-6 m-4 bg-white rounded shadow-lg text-center">
-        <p className="text-gray-700">¿Quieres borrar la partida?</p>
+        <p className="text-gray-700">¿Quéres borrar la partida?</p>
         <button onClick={eraseGame} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4">
           Borrar Partida
         </button>

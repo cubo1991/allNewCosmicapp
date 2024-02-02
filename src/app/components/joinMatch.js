@@ -36,7 +36,7 @@ export const JoinMatch = ({ value, onChange }) => {
         <h2>Unirse a una partida</h2>
         {partida ? (
           <div>
-            <p>Ya tienes una partida iniciada. ¿Quieres borrarla?</p>
+            <p>Ya tienes una partida iniciada. ¿Querés borrarla?</p>
             <button onClick={eraseGame}>Sí</button>
             <button>No</button>
           </div>

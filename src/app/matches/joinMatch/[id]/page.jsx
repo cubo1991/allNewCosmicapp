@@ -4,16 +4,25 @@ import JoinInterface from '@/app/components/joinInterface';
 import { JoinMatch } from '@/app/components/joinMatch'
 import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux';
-// import { useRouter } from 'next/router'
+import ReactLoading from 'react-loading'; // Importa el paquete
 
 const DinamicJoinGame = ({params}) => {
 
   let usuario = useSelector(state => state.user)
-  let user;
-  if (typeof window !== 'undefined') {
-    user = JSON.parse(localStorage.getItem("user"));
-  }
-  const [idPartida, setIdPartida] = useState(user ? user.idPartida : '');
+  const [user, setUser] = useState(null);
+  const [idPartida, setIdPartida] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const localUser = JSON.parse(localStorage.getItem("user"));
+      setUser(localUser);
+      if (localUser) {
+        setIdPartida(localUser.idPartida);
+      }
+      setIsLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
     if (user) {
@@ -38,6 +47,10 @@ const DinamicJoinGame = ({params}) => {
     }
   }
 
+  if (isLoading) {
+    return <ReactLoading type={"spin"} color={"#000000"} height={'20%'} width={'20%'} />; // Reemplaza el antiguo componente de carga
+  }
+
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-200">
       {idPartida ? (
@@ -52,7 +65,7 @@ const DinamicJoinGame = ({params}) => {
         />
       )}
       {
-  usuario && usuario.user && Object.keys(usuario.user).length != 0
+  user && Object.keys(user).length != 0
   ?
       <div className="p-6 m-4 bg-white rounded shadow-lg text-center">
         <p className="text-gray-700">¿Quieres borrar la partida?</p>
