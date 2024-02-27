@@ -44,12 +44,12 @@ const EditStats = () => {
             <th className="py-3 px-6 text-left">Victorias</th>
             <th className="py-3 px-6 text-left">Colonias</th>
             <th className="py-3 px-6 text-left">Promedio de Colonias</th>
-            <th className="py-3 px-6 text-left">Cantidad de Colonias</th>
             <th className="py-3 px-6 text-left">Cantidad de Copas</th>
             <th className="py-3 px-6 text-left">Cantidad de Campañas</th>
             <th className="py-3 px-6 text-left">Victorias Especiales</th>
             <th className="py-3 px-6 text-left">Ataque Solitario</th>
             <th className="py-3 px-6 text-left">Defensa Solitaria</th>
+            <th className="py-3 px-6 text-left">Botón</th>
           </tr>
         </thead>
         <tbody className="text-gray-600 text-sm font-light">
@@ -69,6 +69,7 @@ const EditStats = () => {
                   <td className="py-3 px-6 text-left">
                     <input type="number" value={formData.colonias || ''} onChange={(e) => handleChange(e, 'colonias')} />
                   </td>
+                  <td className="py-3 px-6 text-left">{user.jugadas ? (user.colonias / user.jugadas).toFixed(2) : 0}</td>
                   <td className="py-3 px-6 text-left">
                     <input type="number" value={formData.cantidadCopas || ''} onChange={(e) => handleChange(e, 'cantidadCopas')} />
                   </td>
@@ -95,7 +96,6 @@ const EditStats = () => {
                   <td className="py-3 px-6 text-left">{user.victorias}</td>
                   <td className="py-3 px-6 text-left">{user.colonias}</td>
                   <td className="py-3 px-6 text-left">{user.jugadas ? (user.colonias / user.jugadas).toFixed(2) : 0}</td>
-                  <td className="py-3 px-6 text-left">{user.colonias}</td>
                   <td className="py-3 px-6 text-left">{user.cantidadCopas}</td>
                   <td className="py-3 px-6 text-left">{user.cantidadCampañas}</td>
                   <td className="py-3 px-6 text-left">{user.victoriasEspeciales ? user.victoriasEspeciales : 0}</td>
@@ -109,6 +109,7 @@ const EditStats = () => {
             </tr>
           ))}
         </tbody>
+
       </table>
     </div>
   )

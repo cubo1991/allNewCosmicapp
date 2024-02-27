@@ -16,16 +16,16 @@ const JoinInterface = ({idPartida}) => {
 
 
 
-  const getColors = async() => {
+const getColors = async() => {
     let datos = await getDoc(doc(db,'partidas',idPartida)).then(datos => {
-        if (datos.exists) {
-            setDatosAliens(datos.data())
-            console.log(datos.data())
+        if (datos.exists && datos.data() && datos.data().jugadores) {
+            setDatosAliens(datos.data())            
             const colores = datos.data().jugadores.map(jugador => [jugador.color, jugador.Id]);
             setColoresParticipantes(colores);
         }
     });
-  }
+}
+
 
   useEffect(() => {
     getColors()

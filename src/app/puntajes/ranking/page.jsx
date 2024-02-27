@@ -7,6 +7,7 @@ import { db } from '@/app/firebase';
 const Page = () => {
   const [users, setUsers] = useState([]);
   const [newUsers, setNewUsers] = useState([]);
+  const [loading, setLoading] = useState(true); // Nuevo estado para el control de carga
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -14,17 +15,18 @@ const Page = () => {
       const userSnapshot = await getDocs(usersCollection);
       const userList = userSnapshot.docs.map(doc => ({...doc.data(), id: doc.id}));
   
-      // Calculamos la suma de los últimos 10 valores de 'puntosPartidas' para cada usuario
       const userListWithSum = userList.map(user => {
-        const last10Scores = user.puntosPartidas.slice(-10);
-        const sum = last10Scores.reduce((a, b) => a + b, 0) + user.cantidadCopas + user.cantidadCampañas;
-        return { ...user, sumLast10: sum };
+        if (user.puntosPartidas) {
+          const last10Scores = user.puntosPartidas.slice(-10);
+          const sum = last10Scores.reduce((a, b) => a + b, 0) + user.cantidadCopas + user.cantidadCampañas;
+          return { ...user, sumLast10: sum };
+        } else {
+          return user;
+        }
       });
-  
-      // Ordenamos los usuarios por la suma de los últimos 10 valores de 'puntosPartidas'
+      
       const sortedUserList = userListWithSum.sort((a, b) => b.sumLast10 - a.sumLast10);
   
-      // Asignamos el ranking a cada usuario y actualizamos en Firebase
       const rankedUserList = sortedUserList.map(async (user, index) => {
         const userWithRanking = { ...user, ranking: index + 1 };
         const userRef = doc(db, 'users', user.id);
@@ -35,6 +37,7 @@ const Page = () => {
       const updatedUsers = await Promise.all(rankedUserList);
       setUsers(userList);
       setNewUsers(updatedUsers);
+      setLoading(false); // Finalizamos la carga una vez que se han obtenido todos los datos
     };
   
     fetchUsers();
@@ -42,7 +45,7 @@ const Page = () => {
 
   return (
     <div>
-      <Ranking users={newUsers} />
+      {loading ? 'El ranking se mostrará en un momento' : <Ranking users={newUsers} />}
     </div>
   );
 };

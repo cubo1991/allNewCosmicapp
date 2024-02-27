@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import ReactLoading from 'react-loading'; // Importa el paquete
 
 const DinamicJoinGame = ({params}) => {
-
+console.log(params.id)
   let usuario = useSelector(state => state.user)
   const [user, setUser] = useState(null);
   const [idPartida, setIdPartida] = useState('');
@@ -55,11 +55,11 @@ const DinamicJoinGame = ({params}) => {
     <div className="flex flex-col items-center justify-center h-screen bg-gray-200">
       {idPartida ? (
         <div className="overflow-auto w-full">
-          <JoinInterface idPartida={idPartida}/>
+          <JoinInterface idPartida={params.id}/>
         </div>
       ) : (
         <JoinMatch 
-          value={idPartida}
+          value={params.id}
           onChange={handleInputChange}
           className="p-6 m-4 bg-white rounded shadow-lg"
         />
