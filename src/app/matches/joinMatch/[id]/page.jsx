@@ -16,7 +16,7 @@ const DinamicJoinGame = ({params}) => {
 
  let idWhwatsapp = params.id
 
-
+console.log(idWhwatsapp)
   let usuario = useSelector(state => state.user)
   const [user, setUser] = useState(null);
   const [idPartida, setIdPartida] = useState('');
@@ -59,7 +59,7 @@ const DinamicJoinGame = ({params}) => {
   if (isLoading) {
     return <ReactLoading type={"spin"} color={"#000000"} height={'20%'} width={'20%'} />; // Reemplaza el antiguo componente de carga
   }
-  console.log(idWhwatsapp)
+
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-200">
