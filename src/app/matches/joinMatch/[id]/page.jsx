@@ -18,7 +18,8 @@ const DinamicJoinGame = ({ params }) => {
 
   console.log('params:', params);
   console.log('idWhwatsapp:', idWhwatsapp);
-  
+  console.log("esto es una prueba")
+
   const usuario = useSelector(state => state.user);
   const [user, setUser] = useState(null);
   const [idPartida, setIdPartida] = useState('');
