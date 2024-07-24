@@ -14,7 +14,12 @@ const JoinInterface = ({idPartida}) => {
   const [aliensElegidos, setAliensElegidos] = useState(null)
   const [aliens, setAliens] = useState(alienState || [])
 
+  
+  let aliensState = useSelector((state)=>state.alienList.list)
+useEffect(() => {
+  setAliens(aliensState)
 
+}, []);
 
   const getColors = async () => {
     try {
