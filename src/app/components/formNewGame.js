@@ -85,6 +85,7 @@ const FormNewGame = ({idPartida}) => {
     for (let i = 0; i < jugadores.length; i++) {
       jugadores[i].aliens = aliensShuffled.slice(i * 2, (i + 1) * 2);
     }
+    console.log(jugadores)
     addJugadores(db, idPartida, jugadores)
     addPartida(db, idPartida, userID)
     

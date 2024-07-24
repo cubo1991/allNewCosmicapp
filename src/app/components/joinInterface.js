@@ -52,6 +52,7 @@ useEffect(() => {
     const datos = await getDoc(doc(db,'partidas',idPartida));
     if (datos.exists) {
         const encontrado = datos.data().jugadores.find(jugador => jugador.color === color);
+        console.log(encontrado)
         if (encontrado) {
             setAliensElegidos(encontrado.aliens);
          
