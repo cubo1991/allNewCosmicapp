@@ -33,7 +33,7 @@ export const JoinMatch = ({ value, onChange }) => {
     console.log(value)
     return (
       <div>
-        <h2>Unirse a una partida {value}</h2>
+        <h2>Unirse a una partida {value} con prueba</h2>
         {partida ? (
           <div>
             <p>Ya tienes una partida iniciada. ¿Querés borrarla?</p>
