@@ -30,7 +30,7 @@ export const JoinMatch = ({ value, onChange }) => {
    
       onChange({ target: { value: data.id } });
     }
-  
+    console.log(value)
     return (
       <div>
         <h2>Unirse a una partida</h2>
