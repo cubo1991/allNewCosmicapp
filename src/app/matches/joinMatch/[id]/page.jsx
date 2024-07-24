@@ -3,11 +3,19 @@
 import JoinInterface from '@/app/components/joinInterface';
 import { JoinMatch } from '@/app/components/joinMatch'
 import React, { useState, useEffect } from 'react'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ReactLoading from 'react-loading'; // Importa el paquete
+import { fetchAliens } from '@/redux/features/alienListSlice';
 
 const DinamicJoinGame = ({params}) => {
-console.log(params.id)
+  let dispatch = useDispatch()
+  
+  useEffect(() => {
+    dispatch(fetchAliens())
+  }, [])
+
+ let idWhwatsapp = params.id
+
   let usuario = useSelector(state => state.user)
   const [user, setUser] = useState(null);
   const [idPartida, setIdPartida] = useState('');
@@ -53,13 +61,14 @@ console.log(params.id)
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-200">
-      {idPartida ? (
+      
+      {idPartida || idWhwatsapp ? (
         <div className="overflow-auto w-full">
-          <JoinInterface idPartida={params.id}/>
+          <JoinInterface idPartida={idPartida || idWhwatsapp}/>
         </div>
       ) : (
         <JoinMatch 
-          value={params.id}
+          value={idPartida || idWhwatsapp}
           onChange={handleInputChange}
           className="p-6 m-4 bg-white rounded shadow-lg"
         />
