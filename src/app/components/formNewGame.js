@@ -21,13 +21,10 @@ const codigoColores ={
 const colores = [codigoColores.rojo, codigoColores.azul, codigoColores.blanco, codigoColores.amarillo, codigoColores.negro, codigoColores.morado, codigoColores.verde, codigoColores.naranja];
 
 const FormNewGame = ({idPartida}) => {
-  let dispatch = useDispatch()
-  let aliens = useSelector(state => state.alienList.list)
-  let user = JSON.parse(localStorage.getItem('user'))
-let userID = user.uid 
-
-
-
+  const dispatch = useDispatch()
+  const aliens = useSelector(state => state.alienList.list)
+  const user = JSON.parse(localStorage.getItem('user'))
+  const userID = user ? user.uid : null
 
   const { register, handleSubmit } = useForm()
   const [jugadores, setJugadores] = useState([])
@@ -44,11 +41,11 @@ let userID = user.uid
     let jugadoresValidos = data.jugadores.filter(jugador => jugador && jugador.trim() !== '');
   
     if (jugadoresValidos.length > 0) {
-      let jugadoresActivos = jugadoresValidos.map((jugador, index) => {
-        
+      let jugadoresActivos = jugadoresValidos.map((jugador) => {
+        const colorIndex = data.jugadores.indexOf(jugador);
         return {
           Id: jugador,
-          color: colores[data.jugadores.indexOf(jugador)],
+          color: colores[colorIndex],
           aliens: []
         };
       });
@@ -69,9 +66,13 @@ let userID = user.uid
     }
   };
 
-  const addPartida = async(db,idPartida, userID) =>{
+  const addPartida = async (db, idPartida, userID) => {
+    if (!userID) {
+      console.error("Usuario no identificado.");
+      return;
+    }
     try {
-       await updateDoc(doc(db, "users",userID), {partidaActual: idPartida})
+      await updateDoc(doc(db, "users", userID), { partidaActual: idPartida });
     } catch (error) {
       console.error("Error al actualizar la propiedad del documento: ", error);
       throw error;
@@ -79,7 +80,7 @@ let userID = user.uid
   }
 
   const addAliens = () => {
-    let aliensArray =  Object.values(aliens).map(obj => obj.Nombre);
+    let aliensArray = Object.values(aliens).map(obj => obj.Nombre);
     let aliensShuffled = aliensArray.sort(() => Math.random() - 0.5);
     for (let i = 0; i < jugadores.length; i++) {
       jugadores[i].aliens = aliensShuffled.slice(i * 2, (i + 1) * 2);
@@ -94,18 +95,17 @@ let userID = user.uid
     <div>
       {!jugadoresAsignados
         ? <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col items-center justify-center space-y-4">
-    {Array.from({ length: 8 }, (_, i) => i).map((num) => (
-  <input key={num} {...register(`jugadores.${num}`)} placeholder={`Nombre del Jugador ${num + 1 }`} className={`px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-${colores[num]}-700`} style={{backgroundColor: colores[num], color: [codigoColores.blanco, codigoColores.amarillo].includes(colores[num]) ? 'black' : 'white'}} />
-))}
-            <button type="submit" className="px-4 py-2 text-white rounded-md hover:bg-blue-700" style={{backgroundColor: '#0000FF'}}>Guardar</button>
-          </form>
+          {Array.from({ length: 8 }, (_, i) => i).map((num) => (
+            <input key={num} {...register(`jugadores.${num}`)} placeholder={`Nombre del Jugador ${num + 1}`} className={`px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-${colores[num]}-700`} style={{ backgroundColor: colores[num], color: [codigoColores.blanco, codigoColores.amarillo].includes(colores[num]) ? 'black' : 'white' }} />
+          ))}
+          <button type="submit" className="px-4 py-2 text-white rounded-md hover:bg-blue-700" style={{ backgroundColor: '#0000FF' }}>Guardar</button>
+        </form>
         : !aliensAsignados
-          ? <button onClick={addAliens} className="px-4 py-2 text-white rounded-md hover:bg-blue-700" style={{backgroundColor: '#0000FF'}}>Asignar aliens</button>
+          ? <button onClick={addAliens} className="px-4 py-2 text-white rounded-md hover:bg-blue-700" style={{ backgroundColor: '#0000FF' }}>Asignar aliens</button>
           : <div>
               <p className="text-lg font-bold text-center text-blue-700">El Cosmos ya fue asignado</p>
               <div>
-
-              <Link className="text-center text-blue-500 hover:underline" href={urlWhatsApp} target="_blank" rel="noopener noreferrer">Compartir en WhatsApp</Link>
+                <Link className="text-center text-blue-500 hover:underline" href={urlWhatsApp} target="_blank" rel="noopener noreferrer">Compartir en WhatsApp</Link>
               </div>
               <Link className="text-center text-blue-500 hover:underline" href="/">Volver a la home</Link>
             </div>
@@ -113,5 +113,5 @@ let userID = user.uid
     </div>
   )
 }
- 
+
 export default FormNewGame

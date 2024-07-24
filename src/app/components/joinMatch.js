@@ -30,10 +30,10 @@ export const JoinMatch = ({ value, onChange }) => {
    
       onChange({ target: { value: data.id } });
     }
-  
+    console.log(value)
     return (
       <div>
-        <h2>Unirse a una partida</h2>
+        <h2>Unirse a una partida ESTO ES UNA PRUEBA</h2>
         {partida ? (
           <div>
             <p>Ya tienes una partida iniciada. ¿Querés borrarla?</p>

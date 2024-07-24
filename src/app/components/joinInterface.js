@@ -16,16 +16,28 @@ const JoinInterface = ({idPartida}) => {
 
 
 
-  const getColors = async() => {
-    let datos = await getDoc(doc(db,'partidas',idPartida)).then(datos => {
-        if (datos.exists) {
-            setDatosAliens(datos.data())
-            console.log(datos.data())
-            const colores = datos.data().jugadores.map(jugador => [jugador.color, jugador.Id]);
-            setColoresParticipantes(colores);
+  const getColors = async () => {
+    try {
+        const docRef = doc(db, 'partidas', idPartida);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+            const docData = docSnap.data();
+            if (docData && docData.jugadores) {
+                setDatosAliens(docData);
+                const colores = docData.jugadores.map(jugador => [jugador.color, jugador.Id]);
+                setColoresParticipantes(colores);
+            } else {
+                console.error('No se encontraron jugadores en los datos del documento.');
+            }
+        } else {
+            console.error('No se encontró el documento.');
         }
-    });
-  }
+    } catch (error) {
+        console.error('Error al obtener el documento:', error);
+    }
+}
+
 
   useEffect(() => {
     getColors()
