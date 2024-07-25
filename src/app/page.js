@@ -40,12 +40,13 @@ function Home() {
                 Partidas
               </button>
             </Link>
-            {/* <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded m-2">
-              Perfil
-            </button> */}
-            <Link href='/puntajes'>
+            <Link href='/randomSimpleAlien'>
+            <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded m-2">
+              Alien aleatorio
+            </button> 
+            
 
-            <button className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded m-2">
+            <button  disabled={true} className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded m-2">
               Puntajes
             </button>
             </Link>

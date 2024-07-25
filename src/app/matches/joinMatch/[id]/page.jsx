@@ -9,12 +9,18 @@ import { fetchAliens } from '@/redux/features/alienListSlice';
 
 const DinamicJoinGame = ({ params }) => {
   const dispatch = useDispatch();
-  
+
   useEffect(() => {
     dispatch(fetchAliens());
   }, [dispatch]);
 
   const idWhwatsapp = params?.id;
+
+  useEffect(() => {
+    localStorage.setItem("matchID", JSON.stringify(idWhwatsapp));
+   
+  }, []);
+
 
   console.log('params:', params);
   console.log('idWhwatsapp:', idWhwatsapp);

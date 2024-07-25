@@ -5,6 +5,8 @@ import { db } from '../firebase';
 import { AlienCard } from './alienCard';
 import { AlienCardJoinGameContainer } from './alienCardJoinGameContainer';
 import { useSelector } from 'react-redux';
+import cuboFestejando from '@/Media/cuboFestejando.png'
+import Image from 'next/image';
 
 const JoinInterface = ({idPartida}) => {
   const alienState = useSelector(state => state.alienList.list)
@@ -71,6 +73,8 @@ useEffect(() => {
     <div>
 
     <div className="grid grid-cols-2 gap-4 w-3/4 mx-auto">
+ 
+
       <h1 className="col-span-2 text-center text-2xl font-bold mb-4">Elegí tu color para la partida {idPartida}</h1>
       {coloresParticipantes.map((color, index) => (
        <button

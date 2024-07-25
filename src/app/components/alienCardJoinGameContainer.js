@@ -3,8 +3,7 @@ import { AlienCard } from './alienCard'
 
 export const AlienCardJoinGameContainer = ({aliensJugador}) => {
   const [aliens, setAliens] = useState(JSON.parse(localStorage.getItem('alienList')) || [])
-  console.log('aliens: ', aliens)
-  console.log('aliens del jugador: ' + aliensJugador)
+ 
   const [filteredAliens, setFilteredAliens] = useState([]);
 
   useEffect(() => {
@@ -15,7 +14,6 @@ export const AlienCardJoinGameContainer = ({aliensJugador}) => {
  
   }, [aliens, aliensJugador]);
 
-console.log(filteredAliens)
   return (
 <div className="flex flex-wrap justify-center">
   {filteredAliens.map((alien, index) => (

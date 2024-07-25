@@ -60,6 +60,7 @@ const FormNewGame = ({idPartida}) => {
     try {
       await setDoc(doc(db, "partidas", idPartida), { jugadores: jugadores });
       console.log("Documento creado con ID: ", idPartida);
+      localStorage.setItem("matchID", JSON.stringify(idPartida));
       console.log(jugadores)
     } catch (error) {
       console.error("Error al agregar documento: ", error);
