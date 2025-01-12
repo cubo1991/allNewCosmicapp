@@ -5,6 +5,11 @@ import { fetchAliens } from '../redux/features/alienListSlice'
 import Link from 'next/link'
 import { useState } from 'react'
 import { addUser } from '@/redux/features/userSlice'
+import AlienCounterList from './testsComponente/AlienCounterList'
+import AlienCounterManager from './testsComponente/AlienCounterManager'
+import AlienCounterTester from './testsComponente/AlienCounterTester'
+
+
 
 function Home() {
   let dispatch = useDispatch()
@@ -55,6 +60,12 @@ function Home() {
                 Ver Aliens
               </button>
             </Link>
+          <div>
+            
+            
+            <AlienCounterTester /> 
+           <AlienCounterList /> 
+          </div>
           </div>
           :
           <div>

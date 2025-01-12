@@ -1,7 +1,8 @@
 'use client'
-const { Provider } = require("react-redux")
-const { store } = require("./store")
-import { AppProgressBar as ProgressBar } from 'next-nprogress-bar';
+import { Provider } from 'react-redux'; 
+import { store } from './store';         
+import { AppProgressBar as ProgressBar } from 'next-nprogress-bar'; // Si ya tienes este import, no necesitas cambiarlo
+
 
 
 export function Providers({ children }) {
