@@ -79,18 +79,42 @@ const FormNewGame = ({idPartida}) => {
     }
   }
 
-  const addAliens = () => {
+  const addAliens = async () => {
     let aliensArray = Object.values(aliens).map(obj => obj.Nombre);
     let aliensShuffled = aliensArray.sort(() => Math.random() - 0.5);
+  
+    // Asignar aliens a los jugadores
     for (let i = 0; i < jugadores.length; i++) {
       jugadores[i].aliens = aliensShuffled.slice(i * 2, (i + 1) * 2);
+      
+      // Incrementar el contador de cada alien asignado al jugador
+      for (let j = 0; j < jugadores[i].aliens.length; j++) {
+        const alienNombre = jugadores[i].aliens[j];
+        
+        // Buscar el alien por su nombre (o id, dependiendo de tu estructura de datos)
+        const alien = Object.values(aliens).find(a => a.Nombre === alienNombre);
+        
+        if (alien) {
+          const alienRef = doc(db, 'alienList', alien.id);
+          const newCount = (alien.contador || 0) + 1; // Incrementar el contador
+          
+          // Actualizar el contador en la base de datos
+          await updateDoc(alienRef, { contador: newCount });
+  
+          console.log(`Alien ${alien.Nombre} actualizado: contador de ${alien.contador} a ${newCount}`);
+        }
+      }
     }
-    console.log(jugadores)
-    addJugadores(db, idPartida, jugadores)
-    addPartida(db, idPartida, userID)
+  
+    console.log(jugadores);
+    
+    // Actualizar los jugadores y la partida en la base de datos
+    addJugadores(db, idPartida, jugadores);
+    addPartida(db, idPartida, userID);
     
     setAliensAsignados(true);
   }
+  
 
   return (
     <div>
