@@ -25,6 +25,7 @@ const FormNewGame = ({idPartida}) => {
   const aliens = useSelector(state => state.alienList.list)
   const user = JSON.parse(localStorage.getItem('user'))
   const userID = user ? user.uid : null
+// Esto es un ejemplo
 
   const { register, handleSubmit } = useForm()
   const [jugadores, setJugadores] = useState([])
